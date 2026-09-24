@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Animated Heart Pattern 💖</title>
+  <title>Slow Animated Heart 💖</title>
   <style>
     * {
       margin: 0;
@@ -59,8 +59,7 @@
   ctx.fillStyle = "#000000";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  // دالة رسم تدريجية (Animation Loop)
-  function animate() {
+  function drawRay() {
     if (currentRay >= N) return;
 
     const ang = 2 * Math.PI * currentRay / N;
@@ -97,10 +96,11 @@
     }
 
     currentRay++;
-    requestAnimationFrame(animate); // الانتقال للشعاع التالي بفاصل زمني انسيابي
+    // التحكم ببطء الحركة (كل 25 ميلي ثانية يرسم شعاع واحد)
+    setTimeout(drawRay, 25);
   }
 
-  animate();
+  drawRay();
 </script>
 
 </body>
