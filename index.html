@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Heart For You ❤️</title>
+  <title>Heart & Poem For You ❤️🌹</title>
   <style>
     * {
       margin: 0;
@@ -50,6 +50,8 @@
 
     if (i < totalPoints) {
       const a = 2 * Math.PI * i / totalPoints;
+      
+      // معادلة شكل القلب
       const xo = 16 * Math.pow(Math.sin(a), 3) * scale;
       const yo = -(13 * Math.cos(a) - 5 * Math.cos(2 * a) - 2 * Math.cos(3 * a) - Math.cos(4 * a)) * scale;
 
@@ -57,11 +59,12 @@
       const xi = xo * (1 - L);
       const yi = yo * (1 - L);
 
+      // درجات اللون الأحمر الوردي الدافيء
       for (let j = 0; j < 10; j++) {
         const f = j / 10;
-        const r = Math.floor((1 - 0.6 * f) * 255);
-        const g = Math.floor((0.7 * (1 - f)) * 255);
-        const b = Math.floor((0.8 * (1 - f)) * 255);
+        const r = 255;
+        const g = Math.floor((1 - f) * 40);
+        const b = Math.floor((1 - f) * 80);
 
         ctx.strokeStyle = `rgb(${r}, ${g}, ${b})`;
         ctx.lineWidth = 2;
@@ -74,21 +77,46 @@
       i++;
       setTimeout(draw, 15);
     } else {
-      // كتابة العبارة في منتصف القلب بعد اكتمال الرسم
-      const fontSize = Math.max(14, Math.floor(Math.min(canvas.width, canvas.height) / 28));
-      ctx.fillStyle = "#ffffff";
-      ctx.font = `bold ${fontSize}px system-ui, sans-serif`;
+      // إظهار الوردة والعبارات والشعر في منتصف القلب
+      const fontSize = Math.max(10, Math.floor(Math.min(canvas.width, canvas.height) / 38));
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
+
+      // 1. رسم الوردة الحمراء
+      const roseSize = fontSize * 1.8;
+      ctx.font = `${roseSize}px sans-serif`;
+      ctx.fillText("🌹", centerX, centerY - (fontSize * 8.5));
+
+      // 2. رسم العبارة الرئيسية (باللون الأبيض)
+      ctx.fillStyle = "#ffffff";
+      ctx.font = `bold ${fontSize * 1.1}px system-ui, sans-serif`;
 
       const line1 = "سلامة قلبك وجسدك يا حبيبتي،";
       const line2 = "لو كان الأمر بايدي لأخذت التعب عنكِ";
       const line3 = "لتضلي دائمًا بخير ❤️";
 
-      const lineHeight = fontSize * 1.5;
-      ctx.fillText(line1, centerX, centerY - lineHeight);
-      ctx.fillText(line2, centerX, centerY);
-      ctx.fillText(line3, centerX, centerY + lineHeight);
+      const lineHeight = fontSize * 1.35;
+      ctx.fillText(line1, centerX, centerY - (lineHeight * 6.0));
+      ctx.fillText(line2, centerX, centerY - (lineHeight * 4.8));
+      ctx.fillText(line3, centerX, centerY - (lineHeight * 3.6));
+
+      // 3. رسم أسطر قصيدة النهر (باللون الذهبي الدافئ)
+      ctx.fillStyle = "#ffd700";
+      ctx.font = `${fontSize * 0.85}px system-ui, sans-serif`;
+
+      const poemLines = [
+        "إذا كان ثمة نهر أكثرُ جمالًا من هذا اللون الوردي كالقمر الدموي",
+        "إذا كان ثمة نهر أكثرُ وفاءً من هذه العودة الشهرية إلى النبع ذاته",
+        "إذا كان ثمة نهر أكثرُ شجاعةً من هذا التدفق الآتي في شغف وألم",
+        "إذا كان ثمة نهر أكثرُ قِدَمًا من ابنة حواء أم هابيل وقابيل",
+        "إذا كان في الكون نهرٌ، إذا كان في الكون مياه أكثرُ قوةً من هذه المياه الجموح",
+        "فلنُصلِ بأن تتدفق أيضًا عبر المخلوقات",
+        "جميلة، وعتيقة، ووفية، وشجاعة، وأنثوية"
+      ];
+
+      poemLines.forEach((line, index) => {
+        ctx.fillText(line, centerX, centerY - (lineHeight * 1.8) + (index * lineHeight));
+      });
     }
   }
 
