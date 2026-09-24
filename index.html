@@ -1,59 +1,40 @@
-<!DOCTYPE html>
-<html lang="ar">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Beautiful Rose 🌹</title>
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body, html {
-      width: 100%;
-      height: 100%;
-      background-color: #000000;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      overflow: hidden;
-    }
-    .container {
-      width: 100%;
-      max-width: 450px;
-      padding: 20px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-    svg {
-      width: 100%;
-      height: auto;
-      max-height: 80vh;
-      filter: drop-shadow(0 0 25px rgba(230, 0, 50, 0.4));
-    }
-  </style>
-</head>
-<body>
+import turtle
+import math
 
-<div class="container">
-  <svg viewBox="0 0 400 500" xmlns="http://www.w3.org/2000/svg">
-    <!-- الساق والأوراق -->
-    <path d="M200 280 Q 190 380 200 480" stroke="#1b5e20" stroke-width="8" fill="none" stroke-linecap="round"/>
-    <path d="M195 360 C 130 330 110 390 195 400 Z" fill="#2e7d32"/>
-    <path d="M205 380 C 270 350 290 410 205 420 Z" fill="#1b5e20"/>
+def heart(t):
+    x = 16 * math.sin(t)**3
+    y = 13 * math.cos(t) - 5 * math.cos(2*t) - 2 * math.cos(3*t) - math.cos(4*t)
+    return x, y
+
+screen = turtle.Screen()
+screen.setup(600, 600)
+screen.bgcolor("black")
+screen.colormode(1.0)
+
+t = turtle.Turtle()
+t.speed(0)
+t.hideturtle()
+t.width(1)
+
+N, K = 140, 2.1
+SCALE = 10
+bright, dark = (0.95, 0.15, 0.1), (0.03, 0.0, 0.0)
+
+for i in range(N):
+    ang = 2 * math.pi * i / N
+    hx, hy = heart(ang)
+    hx, hy = hx * SCALE, hy * SCALE
+    ex, ey = hx * K, hy * K
+    steps = 14
     
-    <!-- بتلات الوردة الحمراء الناعمة -->
-    <g id="rose-petals">
-      <!-- البتلات الخارجية -->
-      <path d="M 110 180 C 80 80 320 80 290 180 C 330 270 70 270 110 180 Z" fill="#800020"/>
-      <path d="M 120 190 C 100 100 300 100 280 190 C 310 260 90 260 120 190 Z" fill="#a00028"/>
-      <path d="M 130 170 C 110 120 290 120 270 170 C 290 240 110 240 130 170 Z" fill="#c4002e"/>
-      <path d="M 140 180 C 120 130 280 130 260 180 C 280 230 120 230 140 180 Z" fill="#e60039"/>
-      <!-- مركز الوردة -->
-      <path d="M 155 175 C 140 140 260 140 245 175 C 260 215 140 215 155 175 Z" fill="#ff1a4d"/>
-      <path d="M 170 170 C 160 150 240 150 230 170 C 240 200 160 200 170 170 Z" fill="#ff4d73"/>
-      <ellipse cx="200" cy="170" rx="15" ry="10" fill="#ff809b"/>
-    </g>
-  </svg>
-</div>
+    t.penup()
+    t.goto(hx, hy)
+    t.pendown()
+    
+    for j in range(steps):
+        f = (j + 1) / steps
+        col = tuple(bright[c] + (dark[c] - bright[c]) * f for c in range(3))
+        t.pencolor(col)
+        t.goto(hx + (ex - hx) * f, hy + (ey - hy) * f)
 
-</body>
-</html>
+turtle.done()
