@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Heart For You ❤️</title>
+  <title>A Big Beautiful Rose 🌹</title>
   <style>
     * {
       margin: 0;
@@ -14,11 +14,10 @@
       width: 100%;
       height: 100%;
       overflow: hidden;
-      background-color: #000000;
+      background-color: #050505;
       display: flex;
       justify-content: center;
       align-items: center;
-      font-family: system-ui, -apple-system, sans-serif;
     }
     canvas {
       display: block;
@@ -40,92 +39,90 @@
   resize();
   window.addEventListener('resize', resize);
 
-  const totalPoints = 360;
-  let i = 0;
+  let progress = 0;
+  const maxProgress = 1.0;
 
-  function draw() {
-    const centerX = canvas.width / 2;
-    const centerY = canvas.height / 2;
+  function drawRose() {
+    const cx = canvas.width / 2;
+    const cy = canvas.height / 2 + 30; // إزاحة خفيفة للأسفل لتتوازن الوردة في منتصف الشاشة
     
-    // مقاس القلب المتناسق
-    const scale = Math.min(canvas.width, canvas.height) / 25;
+    // مقاس كبير وعملاق للوردة بملء الشاشة
+    const scale = Math.min(canvas.width, canvas.height) / 480;
 
-    if (i < totalPoints) {
-      const a = 2 * Math.PI * i / totalPoints;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // 1. رسم الساق والأوراق الخضراء الكبيرة
+    if (progress > 0.05) {
+      ctx.save();
+      ctx.translate(cx, cy);
       
-      const xo = 16 * Math.pow(Math.sin(a), 3) * scale;
-      const yo = -(13 * Math.cos(a) - 5 * Math.cos(2 * a) - 2 * Math.cos(3 * a) - Math.cos(4 * a)) * scale;
+      // الساق الناعمة
+      ctx.beginPath();
+      ctx.moveTo(0, 30 * scale);
+      ctx.bezierCurveTo(-15 * scale, 160 * scale, 20 * scale, 280 * scale, 0, 380 * scale);
+      ctx.lineWidth = 10 * scale;
+      ctx.strokeStyle = "#1b5e20";
+      ctx.shadowColor = "rgba(27, 94, 32, 0.5)";
+      ctx.shadowBlur = 15;
+      ctx.stroke();
 
-      const L = 0.05 + Math.random() * 0.15;
-      const xi = xo * (1 - L);
-      const yi = yo * (1 - L);
-
-      for (let j = 0; j < 8; j++) {
-        const f = j / 8;
-        const r = 255;
-        const g = Math.floor((1 - f) * 30);
-        const b = Math.floor((1 - f) * 60);
-
-        ctx.strokeStyle = `rgb(${r}, ${g}, ${b})`;
-        ctx.lineWidth = 2.5;
+      // الورقة اليسرى
+      if (progress > 0.2) {
         ctx.beginPath();
-        ctx.moveTo(centerX + xo + (xi - xo) * f, centerY + yo + (yi - yo) * f);
-        ctx.lineTo(centerX + xo + (xi - xo) * (f + 0.1), centerY + yo + (yi - yo) * (f + 0.1));
-        ctx.stroke();
+        ctx.moveTo(-8 * scale, 170 * scale);
+        ctx.bezierCurveTo(-110 * scale, 120 * scale, -140 * scale, 210 * scale, -8 * scale, 230 * scale);
+        ctx.fillStyle = "#2e7d32";
+        ctx.shadowColor = "rgba(46, 125, 50, 0.4)";
+        ctx.shadowBlur = 10;
+        ctx.fill();
       }
 
-      i++;
-      setTimeout(draw, 10);
-    } else {
-      // تفريغ مركز القلب بالكامل
-      ctx.fillStyle = "#000000";
-      ctx.beginPath();
-      ctx.arc(centerX, centerY - scale * 0.5, scale * 11.5, 0, Math.PI * 2);
-      ctx.fill();
+      // الورقة اليمنى
+      if (progress > 0.3) {
+        ctx.beginPath();
+        ctx.moveTo(8 * scale, 240 * scale);
+        ctx.bezierCurveTo(110 * scale, 190 * scale, 140 * scale, 280 * scale, 8 * scale, 300 * scale);
+        ctx.fillStyle = "#1b5e20";
+        ctx.fill();
+      }
+      ctx.restore();
+    }
 
-      const baseFontSize = Math.max(12, Math.floor(Math.min(canvas.width, canvas.height) / 27));
-      ctx.textAlign = "center";
-      ctx.textBaseline = "middle";
+    // 2. رسم البتلات الحمراء المخملية ثلاثية الأبعاد بملء الشاشة
+    if (progress > 0.1) {
+      ctx.save();
+      ctx.translate(cx, cy - 90 * scale);
 
-      ctx.shadowColor = "rgba(0, 0, 0, 0.95)";
-      ctx.shadowBlur = 8;
+      const petalCount = 1400; // عدد بتلات كثيف لإعطاء مظهر ممتلئ وجميل جداً
+      const currentPetals = Math.floor(petalCount * Math.min(progress, 1));
 
-      // 1. العبارة الرئيسية (لون أبيض وخط عريض ومسافات ممتازة)
-      ctx.fillStyle = "#ffffff";
-      ctx.font = `bold ${baseFontSize * 1.25}px system-ui, sans-serif`;
+      for (let i = 0; i < currentPetals; i++) {
+        const theta = i * 0.08;
+        const r = (240 * scale) * Math.pow(Math.sin(theta * 0.45), 2) * (1 - 0.18 * Math.cos(theta * 3));
+        
+        const x = r * Math.cos(theta);
+        const y = -r * Math.sin(theta) * 0.82 + (theta * 1.8 * scale);
 
-      const line1 = "سلامة قلبك وجسدك يا حبيبتي،";
-      const line2 = "لو كان الأمر بايدي لأخذت التعب عنكِ";
-      const line3 = "لتضلي دائمًا بخير ❤️";
+        // تدرج ألوان مخملي دافئ من التوتي الداكن إلى الأحمر الياقوتي البراق
+        const red = Math.floor(210 + 45 * Math.sin(i * 0.04));
+        const green = Math.floor(5 + 15 * Math.sin(i * 0.02));
+        const blue = Math.floor(20 + 25 * Math.cos(i * 0.03));
 
-      const lineHeight = baseFontSize * 1.42;
-      ctx.fillText(line1, centerX, centerY - (lineHeight * 4.2));
-      ctx.fillText(line2, centerX, centerY - (lineHeight * 2.9));
-      ctx.fillText(line3, centerX, centerY - (lineHeight * 1.6));
+        ctx.fillStyle = `rgb(${red}, ${green}, ${blue})`;
+        ctx.beginPath();
+        ctx.arc(x, y, (12 - (i / petalCount) * 8.5) * scale, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      ctx.restore();
+    }
 
-      // 2. قصيدة النهر باللون الذهبي البراق مع إزاحة خفيفة لمنع ملامسة حافة القلب
-      ctx.fillStyle = "#ffdb4d";
-      ctx.font = `bold ${baseFontSize * 0.88}px system-ui, sans-serif`;
-
-      const poemLines = [
-        "إذا كان ثمة نهر أكثرُ جمالًا من هذا اللون الوردي",
-        "كالقمر الدموي.. إذا كان ثمة نهر أكثرُ وفاءً",
-        "من هذه العودة الشهرية إلى النبع ذاته..",
-        "إذا كان ثمة نهر أكثرُ شجاعةً من هذا التدفق",
-        "الآتي في شغف وألم.. إذا كان ثمة نهر أكثرُ قِدَمًا",
-        "من ابنة حواء أم هابيل وقابيل.. إذا كان في الكون نهرٌ",
-        "إذا كان في الكون مياه أكثرُ قوةً من هذه المياه الجموح",
-        "فلنُصلِ بأن تتدفق أيضًا عبر المخلوقات",
-        "جميلة، وعتيقة، ووفية، وشجاعة، وأنثوية"
-      ];
-
-      poemLines.forEach((line, index) => {
-        ctx.fillText(line, centerX, centerY - (lineHeight * 0.2) + (index * lineHeight * 0.92));
-      });
+    if (progress < maxProgress) {
+      progress += 0.007;
+      requestAnimationFrame(drawRose);
     }
   }
 
-  draw();
+  drawRose();
 </script>
 </body>
 </html>
