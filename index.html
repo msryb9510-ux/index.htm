@@ -3,9 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>A Beautiful Rose 🌹</title>
+  <title>Heart Pattern 💖</title>
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
     body, html {
       width: 100%;
       height: 100%;
@@ -15,43 +19,89 @@
       align-items: center;
       overflow: hidden;
     }
-    .container {
-      width: 100%;
-      max-width: 420px;
-      padding: 10px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-    svg {
-      width: 100%;
-      height: auto;
-      max-height: 80vh;
-      filter: drop-shadow(0 0 20px rgba(230, 0, 50, 0.4));
+    canvas {
+      display: block;
     }
   </style>
 </head>
 <body>
 
-<div class="container">
-  <svg viewBox="0 0 400 500" xmlns="http://www.w3.org/2000/svg">
-    <!-- الساق والأوراق -->
-    <path d="M200 280 Q 190 380 200 480" stroke="#1b5e20" stroke-width="8" fill="none" stroke-linecap="round"/>
-    <path d="M195 360 C 130 330 110 390 195 400 Z" fill="#2e7d32"/>
-    <path d="M205 380 C 270 350 290 410 205 420 Z" fill="#1b5e20"/>
-    
-    <!-- بتلات الوردة الحمراء الناعمة -->
-    <g id="rose-petals">
-      <path d="M 110 180 C 80 80 320 80 290 180 C 330 270 70 270 110 180 Z" fill="#800020"/>
-      <path d="M 120 190 C 100 100 300 100 280 190 C 310 260 90 260 120 190 Z" fill="#a00028"/>
-      <path d="M 130 170 C 110 120 290 120 270 170 C 290 240 110 240 130 170 Z" fill="#c4002e"/>
-      <path d="M 140 180 C 120 130 280 130 260 180 C 280 230 120 230 140 180 Z" fill="#e60039"/>
-      <path d="M 155 175 C 140 140 260 140 245 175 C 260 215 140 215 155 175 Z" fill="#ff1a4d"/>
-      <path d="M 170 170 C 160 150 240 150 230 170 C 240 200 160 200 170 170 Z" fill="#ff4d73"/>
-      <ellipse cx="200" cy="170" rx="15" ry="10" fill="#ff809b"/>
-    </g>
-  </svg>
-</div>
+<canvas id="canvas"></canvas>
+
+<script>
+  const canvas = document.getElementById('canvas');
+  const ctx = canvas.getContext('2d');
+
+  function resize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    draw();
+  }
+
+  // دالة حساب منحنى القلب المأخوذة من كود بايثون
+  function heart(t) {
+    const x = 16 * Math.pow(Math.sin(t), 3);
+    const y = 13 * Math.cos(t) - 5 * Math.cos(2*t) - 2 * Math.cos(3*t) - Math.cos(4*t);
+    return { x: x, y: y };
+  }
+
+  function draw() {
+    ctx.fillStyle = "#000000";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    const cx = canvas.width / 2;
+    const cy = canvas.height / 2;
+
+    // ضبط المقياس ليتناسب مع حجم شاشة الجوال أو الكمبيوتر
+    const SCALE = Math.min(canvas.width, canvas.height) / 45;
+    const N = 140;
+    const K = 2.1;
+    const steps = 14;
+
+    const bright = [0.95, 0.15, 0.1];
+    const dark = [0.03, 0.0, 0.0];
+
+    for (let i = 0; i < N; i++) {
+      const ang = 2 * Math.PI * i / N;
+      const h = heart(ang);
+      
+      // تحويل الإحداثيات لتناسب نظام Canvas (قلب محور y)
+      const hx = h.x * SCALE;
+      const hy = -h.y * SCALE;
+
+      const ex = hx * K;
+      const ey = hy * K;
+
+      let prevX = cx + hx;
+      let prevY = cy + hy;
+
+      for (let j = 0; j < steps; j++) {
+        const f = (j + 1) / steps;
+        
+        // حساب التدرج اللونية نفس كود بايثون
+        const r = Math.floor((bright[0] + (dark[0] - bright[0]) * f) * 255);
+        const g = Math.floor((bright[1] + (dark[1] - bright[1]) * f) * 255);
+        const b = Math.floor((bright[2] + (dark[2] - bright[2]) * f) * 255);
+
+        const currX = cx + hx + (ex - hx) * f;
+        const currY = cy + hy + (ey - hy) * f;
+
+        ctx.beginPath();
+        ctx.moveTo(prevX, prevY);
+        ctx.lineTo(currX, currY);
+        ctx.strokeStyle = `rgb(${r}, ${g}, ${b})`;
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+
+        prevX = currX;
+        prevY = currY;
+      }
+    }
+  }
+
+  window.addEventListener('resize', resize);
+  resize();
+</script>
 
 </body>
 </html>
