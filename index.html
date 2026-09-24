@@ -3,126 +3,57 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>A Big Beautiful Rose 🌹</title>
+  <title>Beautiful Rose 🌹</title>
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
     body, html {
       width: 100%;
       height: 100%;
+      background-color: #000000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
       overflow: hidden;
-      background-color: #050505;
+    }
+    .container {
+      width: 100%;
+      max-width: 450px;
+      padding: 20px;
       display: flex;
       justify-content: center;
       align-items: center;
     }
-    canvas {
-      display: block;
+    svg {
+      width: 100%;
+      height: auto;
+      max-height: 80vh;
+      filter: drop-shadow(0 0 25px rgba(230, 0, 50, 0.4));
     }
   </style>
 </head>
 <body>
 
-<canvas id="canvas"></canvas>
-
-<script>
-  const canvas = document.getElementById('canvas');
-  const ctx = canvas.getContext('2d');
-
-  function resize() {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-  }
-  resize();
-  window.addEventListener('resize', resize);
-
-  let progress = 0;
-  const maxProgress = 1.0;
-
-  function drawRose() {
-    const cx = canvas.width / 2;
-    const cy = canvas.height / 2 + 30; // إزاحة خفيفة للأسفل لتتوازن الوردة في منتصف الشاشة
+<div class="container">
+  <svg viewBox="0 0 400 500" xmlns="http://www.w3.org/2000/svg">
+    <!-- الساق والأوراق -->
+    <path d="M200 280 Q 190 380 200 480" stroke="#1b5e20" stroke-width="8" fill="none" stroke-linecap="round"/>
+    <path d="M195 360 C 130 330 110 390 195 400 Z" fill="#2e7d32"/>
+    <path d="M205 380 C 270 350 290 410 205 420 Z" fill="#1b5e20"/>
     
-    // مقاس كبير وعملاق للوردة بملء الشاشة
-    const scale = Math.min(canvas.width, canvas.height) / 480;
+    <!-- بتلات الوردة الحمراء الناعمة -->
+    <g id="rose-petals">
+      <!-- البتلات الخارجية -->
+      <path d="M 110 180 C 80 80 320 80 290 180 C 330 270 70 270 110 180 Z" fill="#800020"/>
+      <path d="M 120 190 C 100 100 300 100 280 190 C 310 260 90 260 120 190 Z" fill="#a00028"/>
+      <path d="M 130 170 C 110 120 290 120 270 170 C 290 240 110 240 130 170 Z" fill="#c4002e"/>
+      <path d="M 140 180 C 120 130 280 130 260 180 C 280 230 120 230 140 180 Z" fill="#e60039"/>
+      <!-- مركز الوردة -->
+      <path d="M 155 175 C 140 140 260 140 245 175 C 260 215 140 215 155 175 Z" fill="#ff1a4d"/>
+      <path d="M 170 170 C 160 150 240 150 230 170 C 240 200 160 200 170 170 Z" fill="#ff4d73"/>
+      <ellipse cx="200" cy="170" rx="15" ry="10" fill="#ff809b"/>
+    </g>
+  </svg>
+</div>
 
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    // 1. رسم الساق والأوراق الخضراء الكبيرة
-    if (progress > 0.05) {
-      ctx.save();
-      ctx.translate(cx, cy);
-      
-      // الساق الناعمة
-      ctx.beginPath();
-      ctx.moveTo(0, 30 * scale);
-      ctx.bezierCurveTo(-15 * scale, 160 * scale, 20 * scale, 280 * scale, 0, 380 * scale);
-      ctx.lineWidth = 10 * scale;
-      ctx.strokeStyle = "#1b5e20";
-      ctx.shadowColor = "rgba(27, 94, 32, 0.5)";
-      ctx.shadowBlur = 15;
-      ctx.stroke();
-
-      // الورقة اليسرى
-      if (progress > 0.2) {
-        ctx.beginPath();
-        ctx.moveTo(-8 * scale, 170 * scale);
-        ctx.bezierCurveTo(-110 * scale, 120 * scale, -140 * scale, 210 * scale, -8 * scale, 230 * scale);
-        ctx.fillStyle = "#2e7d32";
-        ctx.shadowColor = "rgba(46, 125, 50, 0.4)";
-        ctx.shadowBlur = 10;
-        ctx.fill();
-      }
-
-      // الورقة اليمنى
-      if (progress > 0.3) {
-        ctx.beginPath();
-        ctx.moveTo(8 * scale, 240 * scale);
-        ctx.bezierCurveTo(110 * scale, 190 * scale, 140 * scale, 280 * scale, 8 * scale, 300 * scale);
-        ctx.fillStyle = "#1b5e20";
-        ctx.fill();
-      }
-      ctx.restore();
-    }
-
-    // 2. رسم البتلات الحمراء المخملية ثلاثية الأبعاد بملء الشاشة
-    if (progress > 0.1) {
-      ctx.save();
-      ctx.translate(cx, cy - 90 * scale);
-
-      const petalCount = 1400; // عدد بتلات كثيف لإعطاء مظهر ممتلئ وجميل جداً
-      const currentPetals = Math.floor(petalCount * Math.min(progress, 1));
-
-      for (let i = 0; i < currentPetals; i++) {
-        const theta = i * 0.08;
-        const r = (240 * scale) * Math.pow(Math.sin(theta * 0.45), 2) * (1 - 0.18 * Math.cos(theta * 3));
-        
-        const x = r * Math.cos(theta);
-        const y = -r * Math.sin(theta) * 0.82 + (theta * 1.8 * scale);
-
-        // تدرج ألوان مخملي دافئ من التوتي الداكن إلى الأحمر الياقوتي البراق
-        const red = Math.floor(210 + 45 * Math.sin(i * 0.04));
-        const green = Math.floor(5 + 15 * Math.sin(i * 0.02));
-        const blue = Math.floor(20 + 25 * Math.cos(i * 0.03));
-
-        ctx.fillStyle = `rgb(${red}, ${green}, ${blue})`;
-        ctx.beginPath();
-        ctx.arc(x, y, (12 - (i / petalCount) * 8.5) * scale, 0, Math.PI * 2);
-        ctx.fill();
-      }
-      ctx.restore();
-    }
-
-    if (progress < maxProgress) {
-      progress += 0.007;
-      requestAnimationFrame(drawRose);
-    }
-  }
-
-  drawRose();
-</script>
 </body>
 </html>
