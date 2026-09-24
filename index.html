@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Heart & Poem For You ❤️🌹</title>
+  <title>Heart & Poem For You ❤️</title>
   <style>
     * {
       margin: 0;
@@ -18,7 +18,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      font-family: system-ui, -apple-system, sans-serif;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
     canvas {
       display: block;
@@ -40,34 +40,33 @@
   resize();
   window.addEventListener('resize', resize);
 
-  const totalPoints = 320;
+  const totalPoints = 360;
   let i = 0;
 
   function draw() {
     const centerX = canvas.width / 2;
     const centerY = canvas.height / 2;
-    const scale = Math.min(canvas.width, canvas.height) / 38;
+    // تكبير أبعاد رسمة القلب لتستوعب الكلام بوضوح
+    const scale = Math.min(canvas.width, canvas.height) / 30;
 
     if (i < totalPoints) {
       const a = 2 * Math.PI * i / totalPoints;
       
-      // معادلة شكل القلب
       const xo = 16 * Math.pow(Math.sin(a), 3) * scale;
       const yo = -(13 * Math.cos(a) - 5 * Math.cos(2 * a) - 2 * Math.cos(3 * a) - Math.cos(4 * a)) * scale;
 
-      const L = 0.15 + Math.random() * 0.35;
+      const L = 0.12 + Math.random() * 0.28;
       const xi = xo * (1 - L);
       const yi = yo * (1 - L);
 
-      // درجات اللون الأحمر الوردي الدافيء
       for (let j = 0; j < 10; j++) {
         const f = j / 10;
         const r = 255;
-        const g = Math.floor((1 - f) * 40);
-        const b = Math.floor((1 - f) * 80);
+        const g = Math.floor((1 - f) * 30);
+        const b = Math.floor((1 - f) * 70);
 
         ctx.strokeStyle = `rgb(${r}, ${g}, ${b})`;
-        ctx.lineWidth = 2;
+        ctx.lineWidth = 2.5;
         ctx.beginPath();
         ctx.moveTo(centerX + xo + (xi - xo) * f, centerY + yo + (yi - yo) * f);
         ctx.lineTo(centerX + xo + (xi - xo) * (f + 0.1), centerY + yo + (yi - yo) * (f + 0.1));
@@ -75,34 +74,35 @@
       }
 
       i++;
-      setTimeout(draw, 15);
+      setTimeout(draw, 12);
     } else {
-      // إظهار الوردة والعبارات والشعر في منتصف القلب
-      const fontSize = Math.max(10, Math.floor(Math.min(canvas.width, canvas.height) / 38));
+      // عمل ظل داكن خلف الكتابة لبروزها وإلغاء أي تشويش خلفها
+      ctx.fillStyle = "rgba(0, 0, 0, 0.75)";
+      ctx.beginPath();
+      ctx.arc(centerX, centerY, scale * 12, 0, Math.PI * 2);
+      ctx.fill();
+
+      // إعدادات النص والخط الواضح
+      const fontSize = Math.max(12, Math.floor(Math.min(canvas.width, canvas.height) / 30));
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
 
-      // 1. رسم الوردة الحمراء
-      const roseSize = fontSize * 1.8;
-      ctx.font = `${roseSize}px sans-serif`;
-      ctx.fillText("🌹", centerX, centerY - (fontSize * 8.5));
-
-      // 2. رسم العبارة الرئيسية (باللون الأبيض)
+      // 1. العبارة الرئيسية باللون الأبيض وسماكة واضحة
       ctx.fillStyle = "#ffffff";
-      ctx.font = `bold ${fontSize * 1.1}px system-ui, sans-serif`;
+      ctx.font = `bold ${fontSize * 1.15}px system-ui, sans-serif`;
 
       const line1 = "سلامة قلبك وجسدك يا حبيبتي،";
       const line2 = "لو كان الأمر بايدي لأخذت التعب عنكِ";
       const line3 = "لتضلي دائمًا بخير ❤️";
 
-      const lineHeight = fontSize * 1.35;
-      ctx.fillText(line1, centerX, centerY - (lineHeight * 6.0));
-      ctx.fillText(line2, centerX, centerY - (lineHeight * 4.8));
-      ctx.fillText(line3, centerX, centerY - (lineHeight * 3.6));
+      const lineHeight = fontSize * 1.45;
+      ctx.fillText(line1, centerX, centerY - (lineHeight * 4.2));
+      ctx.fillText(line2, centerX, centerY - (lineHeight * 3.0));
+      ctx.fillText(line3, centerX, centerY - (lineHeight * 1.8));
 
-      // 3. رسم أسطر قصيدة النهر (باللون الذهبي الدافئ)
-      ctx.fillStyle = "#ffd700";
-      ctx.font = `${fontSize * 0.85}px system-ui, sans-serif`;
+      // 2. أسطر قصيدة النهر باللون الذهبي البراق بدون الوردة
+      ctx.fillStyle = "#ffe066";
+      ctx.font = `500 ${fontSize * 0.88}px system-ui, sans-serif`;
 
       const poemLines = [
         "إذا كان ثمة نهر أكثرُ جمالًا من هذا اللون الوردي كالقمر الدموي",
@@ -115,7 +115,7 @@
       ];
 
       poemLines.forEach((line, index) => {
-        ctx.fillText(line, centerX, centerY - (lineHeight * 1.8) + (index * lineHeight));
+        ctx.fillText(line, centerX, centerY + (index * lineHeight * 0.95) - (lineHeight * 0.2));
       });
     }
   }
