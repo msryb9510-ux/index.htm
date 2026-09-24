@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Heart & Rose For You ❤️🌹</title>
+  <title>Heart For You ❤️</title>
   <style>
     * {
       margin: 0;
@@ -47,7 +47,7 @@
     const centerX = canvas.width / 2;
     const centerY = canvas.height / 2;
     
-    // تكبير إطار القلب الخارجي ليتسع للوردة والكلمات
+    // مقاس القلب المتناسق
     const scale = Math.min(canvas.width, canvas.height) / 25;
 
     if (i < totalPoints) {
@@ -56,7 +56,6 @@
       const xo = 16 * Math.pow(Math.sin(a), 3) * scale;
       const yo = -(13 * Math.cos(a) - 5 * Math.cos(2 * a) - 2 * Math.cos(3 * a) - Math.cos(4 * a)) * scale;
 
-      // تحديد حدود الرسم ليبقى مركز القلب نظيفاً
       const L = 0.05 + Math.random() * 0.15;
       const xi = xo * (1 - L);
       const yi = yo * (1 - L);
@@ -78,27 +77,20 @@
       i++;
       setTimeout(draw, 10);
     } else {
-      // تفريغ منطقة الوسط تماماً بدائرة سوداء لضمان وضوح الوردة والخط
+      // تفريغ مركز القلب بالكامل
       ctx.fillStyle = "#000000";
       ctx.beginPath();
       ctx.arc(centerX, centerY - scale * 0.5, scale * 11.5, 0, Math.PI * 2);
       ctx.fill();
 
-      // تحديد حجم الخط والوردة المعتمد على أبعاد الشاشة
-      const baseFontSize = Math.max(13, Math.floor(Math.min(canvas.width, canvas.height) / 26));
+      const baseFontSize = Math.max(12, Math.floor(Math.min(canvas.width, canvas.height) / 27));
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
 
-      // إضافة ظل ناعم وبروز للوردة والكتابة
       ctx.shadowColor = "rgba(0, 0, 0, 0.95)";
       ctx.shadowBlur = 8;
 
-      // 1. رسم وردة حمراء كبيرة بارزة في الأعلى
-      const roseSize = baseFontSize * 2.8;
-      ctx.font = `${roseSize}px sans-serif`;
-      ctx.fillText("🌹", centerX, centerY - (baseFontSize * 6.2));
-
-      // 2. العبارة الرئيسية (خط أبيض عريض وواضح)
+      // 1. العبارة الرئيسية (لون أبيض وخط عريض ومسافات ممتازة)
       ctx.fillStyle = "#ffffff";
       ctx.font = `bold ${baseFontSize * 1.25}px system-ui, sans-serif`;
 
@@ -106,14 +98,14 @@
       const line2 = "لو كان الأمر بايدي لأخذت التعب عنكِ";
       const line3 = "لتضلي دائمًا بخير ❤️";
 
-      const lineHeight = baseFontSize * 1.48;
-      ctx.fillText(line1, centerX, centerY - (lineHeight * 3.2));
-      ctx.fillText(line2, centerX, centerY - (lineHeight * 1.9));
-      ctx.fillText(line3, centerX, centerY - (lineHeight * 0.6));
+      const lineHeight = baseFontSize * 1.42;
+      ctx.fillText(line1, centerX, centerY - (lineHeight * 4.2));
+      ctx.fillText(line2, centerX, centerY - (lineHeight * 2.9));
+      ctx.fillText(line3, centerX, centerY - (lineHeight * 1.6));
 
-      // 3. قصيدة النهر (خط ذهبي كبير وبسماكة عالية)
+      // 2. قصيدة النهر باللون الذهبي البراق مع إزاحة خفيفة لمنع ملامسة حافة القلب
       ctx.fillStyle = "#ffdb4d";
-      ctx.font = `bold ${baseFontSize * 0.9}px system-ui, sans-serif`;
+      ctx.font = `bold ${baseFontSize * 0.88}px system-ui, sans-serif`;
 
       const poemLines = [
         "إذا كان ثمة نهر أكثرُ جمالًا من هذا اللون الوردي",
@@ -128,7 +120,7 @@
       ];
 
       poemLines.forEach((line, index) => {
-        ctx.fillText(line, centerX, centerY + (lineHeight * 1.0) + (index * lineHeight * 0.95));
+        ctx.fillText(line, centerX, centerY - (lineHeight * 0.2) + (index * lineHeight * 0.92));
       });
     }
   }
