@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Slow Animated Heart 💞</title>
     <style>
         * {
@@ -22,8 +22,8 @@
         }
         .container {
             position: relative;
-            width: 100vw;
-            height: 100vh;
+            width: 100%;
+            height: 100%;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -31,36 +31,31 @@
         .heart-text {
             position: absolute;
             font-weight: bold;
-            white-space: nowrap;
             animation: fadeIn 1.5s ease-in-out infinite alternate;
-            text-shadow: 0 0 5px rgba(255, 0, 0, 0.8);
+            text-shadow: 0 0 10px rgba(255, 0, 0, 0.9);
             user-select: none;
-            transform: translate(-50%, -50%);
+            white-space: nowrap;
         }
         @keyframes fadeIn {
-            from { opacity: 0.5; transform: translate(-50%, -50%) scale(0.95); }
-            to { opacity: 1; transform: translate(-50%, -50%) scale(1.05); }
+            from { opacity: 0.4; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1.1); }
         }
         .center-msg {
             position: absolute;
             color: #ff3366;
-            font-size: 1.1rem;
+            font-size: 1.3rem;
             font-weight: bold;
             text-align: center;
-            padding: 10px;
+            padding: 15px;
             z-index: 10;
-            max-width: 80%;
-            line-height: 1.5;
-            text-shadow: 0 0 12px rgba(255, 51, 102, 0.9);
+            line-height: 1.6;
+            text-shadow: 0 0 15px rgba(255, 51, 102, 0.9);
             animation: pulse 2s infinite;
-            transform: translate(-50%, -50%);
-            left: 50%;
-            top: 50%;
         }
         @keyframes pulse {
-            0% { transform: translate(-50%, -50%) scale(1); }
-            50% { transform: translate(-50%, -50%) scale(1.05); }
-            100% { transform: translate(-50%, -50%) scale(1); }
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
         }
     </style>
 </head>
@@ -78,12 +73,10 @@
         ];
 
         const container = document.getElementById('heartContainer');
-        const numPoints = 150;
+        const numPoints = 140;
 
-        // مواءمة الحجم للشاشات الصغيرة
-        const screenWidth = window.innerWidth;
-        const screenHeight = window.innerHeight;
-        const scale = Math.min(screenWidth, screenHeight) / 38;
+        // تكبير مقياس القلب ليناسب الشاشة تماماً
+        const scale = Math.min(window.innerWidth, window.innerHeight) / 22;
 
         for (let i = 0; i < numPoints; i++) {
             let t = Math.random() * Math.PI * 2;
@@ -97,8 +90,8 @@
             span.className = 'heart-text';
             span.innerText = phrases[Math.floor(Math.random() * phrases.length)];
             
-            let offsetX = (Math.random() - 0.5) * 15;
-            let offsetY = (Math.random() - 0.5) * 15;
+            let offsetX = (Math.random() - 0.5) * 20;
+            let offsetY = (Math.random() - 0.5) * 20;
 
             span.style.left = `calc(50% + ${x + offsetX}px)`;
             span.style.top = `calc(50% + ${y + offsetY}px)`;
@@ -107,7 +100,9 @@
             let green = Math.floor(Math.random() * 40);
             let blue = Math.floor(Math.random() * 80);
             span.style.color = `rgb(${red}, ${green}, ${blue})`;
-            span.style.fontSize = `${Math.floor(Math.random() * 4) + 9}px`;
+            
+            // أحجام واضحة وكبيرة للكلمات
+            span.style.fontSize = `${Math.floor(Math.random() * 5) + 12}px`;
             
             container.appendChild(span);
         }
