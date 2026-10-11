@@ -1,107 +1,80 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Slow Animated Heart 💖</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-    body, html {
-      width: 100%;
-      height: 100%;
-      background-color: #000000;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      overflow: hidden;
-    }
-    canvas {
-      display: block;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slow Animated Heart 💞</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body, html {
+            width: 100%;
+            height: 100%;
+            background-color: #000000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .heart-text {
+            position: absolute;
+            font-weight: bold;
+            animation: fadeIn 1.5s ease-in-out infinite alternate;
+            text-shadow: 0 0 8px rgba(255, 0, 0, 0.6);
+            user-select: none;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0.4; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1.05); }
+        }
+        .center-msg {
+            position: absolute;
+            color: #ff3366;
+            font-size: 1.5rem;
+            text-align: center;
+            padding: 20px;
+            z-index: 10;
+            text-shadow: 0 0 15px rgba(255, 51, 102, 0.8);
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+    </style>
 </head>
 <body>
 
-<canvas id="canvas"></canvas>
+    <div class="container" id="heartContainer">
+        <!-- رسالة خاصة بمنتصف القلب -->
+        <div class="center-msg">سلامة قلبك وجسدك يا حبيبتي<br>لو كان الأمر بايدي لأخذت التعب عنكِ</div>
+    </div>
 
-<script>
-  const canvas = document.getElementById('canvas');
-  const ctx = canvas.getContext('2d');
+    <script>
+        const phrases = [
+            "I love you", "Seni seviyorum", "Te amo", "Je t'aime", 
+            "Ich liebe dich", "أحبك", "Я тебя люблю", "Kocham cię", 
+            "Mahal kita", "사랑해", "Te quiero", "Ti amo"
+        ];
 
-  function resize() {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-  }
-  resize();
+        const container = document.getElementById('heartContainer');
+        const numPoints = 120; // عدد الكلمات لتشكيل القلب
 
-  function heart(t) {
-    const x = 16 * Math.pow(Math.sin(t), 3);
-    const y = 13 * Math.cos(t) - 5 * Math.cos(2*t) - 2 * Math.cos(3*t) - Math.cos(4*t);
-    return { x: x, y: y };
-  }
-
-  const cx = canvas.width / 2;
-  const cy = canvas.height / 2;
-  const SCALE = Math.min(canvas.width, canvas.height) / 45;
-  const N = 140;
-  const K = 2.1;
-  const steps = 14;
-
-  const bright = [0.95, 0.15, 0.1];
-  const dark = [0.03, 0.0, 0.0];
-
-  let currentRay = 0;
-
-  ctx.fillStyle = "#000000";
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-  function drawRay() {
-    if (currentRay >= N) return;
-
-    const ang = 2 * Math.PI * currentRay / N;
-    const h = heart(ang);
-
-    const hx = h.x * SCALE;
-    const hy = -h.y * SCALE;
-
-    const ex = hx * K;
-    const ey = hy * K;
-
-    let prevX = cx + hx;
-    let prevY = cy + hy;
-
-    for (let j = 0; j < steps; j++) {
-      const f = (j + 1) / steps;
-
-      const r = Math.floor((bright[0] + (dark[0] - bright[0]) * f) * 255);
-      const g = Math.floor((bright[1] + (dark[1] - bright[1]) * f) * 255);
-      const b = Math.floor((bright[2] + (dark[2] - bright[2]) * f) * 255);
-
-      const currX = cx + hx + (ex - hx) * f;
-      const currY = cy + hy + (ey - hy) * f;
-
-      ctx.beginPath();
-      ctx.moveTo(prevX, prevY);
-      ctx.lineTo(currX, currY);
-      ctx.strokeStyle = `rgb(${r}, ${g}, ${b})`;
-      ctx.lineWidth = 1.5;
-      ctx.stroke();
-
-      prevX = currX;
-      prevY = currY;
-    }
-
-    currentRay++;
-    // التحكم ببطء الحركة (كل 25 ميلي ثانية يرسم شعاع واحد)
-    setTimeout(drawRay, 25);
-  }
-
-  drawRay();
-</script>
-
-</body>
-</html>
+        for (let i = 0; i < numPoints; i++) {
+            let t = Math.random() * Math.PI * 2;
+            
+            // معادلة رسم القلب الرياضية
+            let
