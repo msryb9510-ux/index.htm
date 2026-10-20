@@ -1,28 +1,98 @@
-import turtle
-import math
-import random
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For You <3</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #1a0514;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            color: #ffffff;
+            font-family: Arial, sans-serif;
+        }
+        canvas {
+            background-color: #1a0514;
+        }
+    </style>
+</head>
+<body>
 
-screen = turtle.Screen()
-screen.bgcolor("#1a0514")
-screen.title("For You <3")
+<canvas id="roseCanvas"></canvas>
 
-t = turtle.Turtle()
-t.speed(0)
-t.hideturtle()
-t.penup()
+<script>
+    const canvas = document.getElementById("roseCanvas");
+    const ctx = canvas.getContext("2d");
 
-WORD = "my love"
-FONT = ("Arial", 8, "bold")
+    // ضبط حجم الشاشة
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
 
-def draw_petal(base, base_angle, length, width, color, points=26):
-    t.color(color)
-    bx, by = base
-    cos_a, sin_a = math.cos(base_angle), math.sin(base_angle)
-    for i in range(points + 1):
-        theta = i * math.pi / points
-        out = length * math.sin(theta)
-        side = width * math.sin(theta) * math.cos(theta)
-        rx = out * cos_a - side * sin_a
-        ry = out * sin_a + side * cos_a
-        t.goto(bx + rx, by + ry)
-        t.write(WORD, align="center", font=FONT)
+    const centerX = canvas.width / 2;
+    const centerY = canvas.height / 2 - 20;
+
+    // رسم الساق والأوراق
+    function drawStem() {
+        ctx.beginPath();
+        ctx.moveTo(centerX, centerY + 20);
+        ctx.quadraticCurveTo(centerX - 30, centerY + 150, centerX, centerY + 250);
+        ctx.strokeStyle = "#2d5a27";
+        ctx.lineWidth = 6;
+        ctx.stroke();
+
+        // ورقة شجر يمين
+        ctx.beginPath();
+        ctx.ellipse(centerX + 25, centerY + 160, 30, 12, Math.PI / 4, 0, Math.PI * 2);
+        ctx.fillStyle = "#2d5a27";
+        ctx.fill();
+
+        // ورقة شجر يسار
+        ctx.beginPath();
+        ctx.ellipse(centerX - 25, centerY + 190, 30, 12, -Math.PI / 4, 0, Math.PI * 2);
+        ctx.fillStyle = "#2d5a27";
+        ctx.fill();
+    }
+
+    // رسم الوردة
+    function drawRose() {
+        const petals = 360;
+        ctx.save();
+        ctx.translate(centerX, centerY);
+
+        for (let i = 0; i < petals; i++) {
+            let theta = i * 0.1;
+            let r = 120 * Math.sin(theta * 2.5);
+
+            let x = r * Math.cos(theta);
+            let y = r * Math.sin(theta);
+
+            ctx.beginPath();
+            ctx.arc(x, y, 12 - (i / 40), 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(220, 20, 60, ${0.4 + (i / petals) * 0.6})`;
+            ctx.fill();
+        }
+        ctx.restore();
+    }
+
+    // كتابة النص "my love"
+    function drawText() {
+        ctx.font = "bold 24px Arial";
+        ctx.fillStyle = "#ffb6c1";
+        ctx.textAlign = "center";
+        ctx.fillText("my love", centerX, centerY + 300);
+    }
+
+    // تنفيذ الرسم
+    drawStem();
+    drawRose();
+    drawText();
+</script>
+
+</body>
+</html>
