@@ -3,92 +3,236 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>For You <3</title>
+    <title>أحبك بكل اللغات ❤️</title>
     <style>
-        body {
+        * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            background-color: #1a0514;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            overflow: hidden;
-            color: #ffffff;
-            font-family: Arial, sans-serif;
         }
-        canvas {
+        body {
             background-color: #1a0514;
+            color: #ffffff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow-x: hidden;
+            position: relative;
+            padding: 20px;
+        }
+
+        /* خلفية قلوب متساقطة متحركة */
+        .heart-bg {
+            position: absolute;
+            top: -10%;
+            color: rgba(220, 20, 60, 0.4);
+            font-size: 20px;
+            animation: fall linear infinite;
+            z-index: 1;
+            user-select: none;
+        }
+
+        @keyframes fall {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(110vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .container {
+            z-index: 2;
+            text-align: center;
+            max-width: 800px;
+            width: 100%;
+        }
+
+        h1 {
+            color: #ff4d6d;
+            font-size: 2.2rem;
+            margin-bottom: 25px;
+            text-shadow: 0 0 15px rgba(255, 77, 109, 0.6);
+        }
+
+        .main-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 77, 109, 0.3);
+            border-radius: 20px;
+            padding: 30px 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            margin-bottom: 30px;
+        }
+
+        .heart-center {
+            font-size: 50px;
+            color: #ff4d6d;
+            animation: pulse 1.5s infinite;
+            margin-bottom: 15px;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        .active-phrase {
+            font-size: 2.2rem;
+            font-weight: bold;
+            color: #ff8fa3;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.4s ease;
+        }
+
+        .active-lang {
+            font-size: 1.1rem;
+            color: #c77dff;
+            margin-top: 5px;
+        }
+
+        /* شبكة الكلمات */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 12px;
+            max-height: 350px;
+            overflow-y: auto;
+            padding: 10px;
+            border-radius: 15px;
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        .grid::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .grid::-webkit-scrollbar-thumb {
+            background: #ff4d6d;
+            border-radius: 10px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 12px 8px;
+            transition: transform 0.3s, background 0.3s;
+            cursor: pointer;
+        }
+
+        .card:hover {
+            transform: translateY(-3px);
+            background: rgba(255, 77, 109, 0.25);
+            border-color: #ff4d6d;
+        }
+
+        .card .phrase {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #ffffff;
+        }
+
+        .card .lang {
+            font-size: 0.8rem;
+            color: #b8c0ff;
+            margin-top: 4px;
         }
     </style>
 </head>
 <body>
 
-<canvas id="roseCanvas"></canvas>
+    <div class="container">
+        <h1>أحبك بكل لغات العالم ❤️</h1>
 
-<script>
-    const canvas = document.getElementById("roseCanvas");
-    const ctx = canvas.getContext("2d");
+        <div class="main-card">
+            <div class="heart-center">💖</div>
+            <div class="active-phrase" id="displayPhrase">أحبك يا حبيبتي</div>
+            <div class="active-lang" id="displayLang">العربية (Arabic)</div>
+        </div>
 
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+        <div class="grid" id="loveGrid"></div>
+    </div>
 
-    const centerX = canvas.width / 2;
-    const centerY = canvas.height / 2 - 20;
+    <script>
+        const loveList = [
+            { phrase: "أحبك يا حبيبتي", lang: "العربية" },
+            { phrase: "I Love You", lang: "الإنجليزية" },
+            { phrase: "Je t'aime", lang: "الفرنسية" },
+            { phrase: "Te amo", lang: "الإسبانية" },
+            { phrase: "Ich liebe dich", lang: "الألمانية" },
+            { phrase: "Ti amo", lang: "الإيطالية" },
+            { phrase: "Seni seviyorum", lang: "التركية" },
+            { phrase: "Я тебя люблю", lang: "الروسية" },
+            { phrase: "愛してる (Aishiteru)", lang: "اليابانية" },
+            { phrase: "사랑해 (Saranghae)", lang: "الكورية" },
+            { phrase: "我爱你 (Wǒ ài nǐ)", lang: "الصينية" },
+            { phrase: "Te quiero", lang: "الإسبانية" },
+            { phrase: "Eu te amo", lang: "البرتغالية" },
+            { phrase: "Kocham Cię", lang: "البولندية" },
+            { phrase: "Mahal kita", lang: "الفلبينية" },
+            { phrase: "S'agapo", lang: "اليونانية" },
+            { phrase: "รักคุณ (Rāk khun)", lang: "التايلاندية" },
+            { phrase: "Aku cinta kamu", lang: "الإندونيسية" },
+            { phrase: "मैं तुमसे प्यार करता हूँ", lang: "الهندية" },
+            { phrase: "Szeretlek", lang: "المجرية" },
+            { phrase: "Jeg elsker deg", lang: "النرويجية" },
+            { phrase: "Jag älskar dig", lang: "السويدية" }
+        ];
 
-    // رسم الساق والأوراق
-    function drawStem() {
-        ctx.beginPath();
-        ctx.moveTo(centerX, centerY + 20);
-        ctx.quadraticCurveTo(centerX - 30, centerY + 150, centerX, centerY + 250);
-        ctx.strokeStyle = "#2d5a27";
-        ctx.lineWidth = 6;
-        ctx.stroke();
+        const grid = document.getElementById('loveGrid');
+        const displayPhrase = document.getElementById('displayPhrase');
+        const displayLang = document.getElementById('displayLang');
 
-        ctx.beginPath();
-        ctx.ellipse(centerX + 25, centerY + 160, 30, 12, Math.PI / 4, 0, Math.PI * 2);
-        ctx.fillStyle = "#2d5a27";
-        ctx.fill();
+        // إنشاء بطاقات اللغات
+        loveList.forEach((item) => {
+            const card = document.createElement('div');
+            card.className = 'card';
+            card.innerHTML = `<div class="phrase">${item.phrase}</div><div class="lang">${item.lang}</div>`;
+            card.onclick = () => {
+                displayPhrase.innerText = item.phrase;
+                displayLang.innerText = item.lang;
+            };
+            grid.appendChild(card);
+        });
 
-        ctx.beginPath();
-        ctx.ellipse(centerX - 25, centerY + 190, 30, 12, -Math.PI / 4, 0, Math.PI * 2);
-        ctx.fillStyle = "#2d5a27";
-        ctx.fill();
-    }
+        // التبديل التلقائي المريح بين اللغات
+        let currentIndex = 0;
+        setInterval(() => {
+            currentIndex = (currentIndex + 1) % loveList.length;
+            displayPhrase.style.opacity = '0';
+            setTimeout(() => {
+                displayPhrase.innerText = loveList[currentIndex].phrase;
+                displayLang.innerText = loveList[currentIndex].lang;
+                displayPhrase.style.opacity = '1';
+            }, 300);
+        }, 2500);
 
-    // رسم الوردة
-    function drawRose() {
-        const petals = 360;
-        ctx.save();
-        ctx.translate(centerX, centerY);
+        // تأثير القلوب المتساقطة
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.className = 'heart-bg';
+            heart.innerText = ['❤️', '💖', '💗', '💕', '🌸'][Math.floor(Math.random() * 5)];
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDuration = (Math.random() * 3 + 2) + 's';
+            heart.style.fontSize = (Math.random() * 15 + 15) + 'px';
+            document.body.appendChild(heart);
 
-        for (let i = 0; i < petals; i++) {
-            let theta = i * 0.1;
-            let r = 120 * Math.sin(theta * 2.5);
-
-            let x = r * Math.cos(theta);
-            let y = r * Math.sin(theta);
-
-            ctx.beginPath();
-            ctx.arc(x, y, 12 - (i / 40), 0, Math.PI * 2);
-            ctx.fillStyle = `rgba(220, 20, 60, ${0.4 + (i / petals) * 0.6})`;
-            ctx.fill();
+            setTimeout(() => {
+                heart.remove();
+            }, 5000);
         }
-        ctx.restore();
-    }
 
-    // كتابة النص
-    function drawText() {
-        ctx.font = "bold 24px Arial";
-        ctx.fillStyle = "#ffb6c1";
-        ctx.textAlign = "center";
-        ctx.fillText("my love", centerX, centerY + 300);
-    }
-
-    drawStem();
-    drawRose();
-    drawText();
-</script>
-
+        setInterval(createHeart, 350);
+    </script>
 </body>
 </html>
