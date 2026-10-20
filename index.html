@@ -30,7 +30,6 @@
     const canvas = document.getElementById("roseCanvas");
     const ctx = canvas.getContext("2d");
 
-    // ضبط حجم الشاشة
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
@@ -46,13 +45,11 @@
         ctx.lineWidth = 6;
         ctx.stroke();
 
-        // ورقة شجر يمين
         ctx.beginPath();
         ctx.ellipse(centerX + 25, centerY + 160, 30, 12, Math.PI / 4, 0, Math.PI * 2);
         ctx.fillStyle = "#2d5a27";
         ctx.fill();
 
-        // ورقة شجر يسار
         ctx.beginPath();
         ctx.ellipse(centerX - 25, centerY + 190, 30, 12, -Math.PI / 4, 0, Math.PI * 2);
         ctx.fillStyle = "#2d5a27";
@@ -80,7 +77,7 @@
         ctx.restore();
     }
 
-    // كتابة النص "my love"
+    // كتابة النص
     function drawText() {
         ctx.font = "bold 24px Arial";
         ctx.fillStyle = "#ffb6c1";
@@ -88,11 +85,10 @@
         ctx.fillText("my love", centerX, centerY + 300);
     }
 
-    // تنفيذ الرسم
     drawStem();
     drawRose();
     drawText();
 </script>
 
 </body>
-  </html>
+</html>
